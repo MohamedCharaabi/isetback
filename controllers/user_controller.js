@@ -110,14 +110,18 @@ export const loginUser = async (req, res) => {
       }
 
       // create jwt token
-      const token = jwt.sign({ id: user[0].id }, process.env.JWT_SECRET);
+      const token = jwt.sign({ id: user[0].id }, process.env.JWT_SECRET, {
+        expiresIn: "2m",
+      });
 
       const authUserState = {
         name: user[0].name,
         email: user[0].email,
         token,
       };
-      return res.status(200).json({ authUserState, token: token });
+      return res
+        .status(200)
+        .json({ authUserState, token: token, expiresIn: "2m" });
     })
     .catch((err) =>
       res.status(200).json({
